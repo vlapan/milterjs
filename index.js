@@ -89,9 +89,8 @@ var server = net.createServer(function(socket) {
     data = data || Buffer.alloc(0);
     var len = Buffer.alloc(4);
     len.writeUInt32BE(data.length + 1);
-    this.socket.write(len, writeErrorHandler);
-    this.socket.write(Buffer.from(code), writeErrorHandler);
-    this.socket.write(Buffer.from(data), writeErrorHandler);
+    const packet = Buffer.concat([len, Buffer.from([code.charCodeAt(0)]), data]);
+    this.socket.write(packet, writeErrorHandler);
   };
 
   // Add header HEADER with value VALUE to this mail.  Does not change any
