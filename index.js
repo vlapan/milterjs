@@ -281,7 +281,7 @@ var server = net.createServer(function(socket) {
 
   var call_hooks = function(hook) {
     ctx.hook = hook;
-    if (milter.listenerCount(hook) === 0) {
+    if (hook !== 'abort' && milter.listenerCount(hook) === 0) {
       return ctx.continue();
     }
     var args = Array.prototype.slice.call(arguments, 1);
@@ -314,6 +314,7 @@ var server = net.createServer(function(socket) {
       case SMFIC_ABORT:
         // Abort (cancel current message and get ready to process a new one).
         // An abort packet doesn't need a response.
+        call_hooks('abort');
         // Resets internal state of milter program to before SMFIC_HELO, but keeps the connection open.
         ctx.macros = {};
         break;
