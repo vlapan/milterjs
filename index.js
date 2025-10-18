@@ -92,7 +92,7 @@ var server = net.createServer(function(socket) {
   };
 
   ctx.send = function(code, data) {
-    if (this?.socket?.readyState === 'open') {
+    if (this?.socket?.readyState !== 'open') {
       return;
     }
     data = data || Buffer.alloc(0);
