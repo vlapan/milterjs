@@ -272,7 +272,7 @@ var server = net.createServer(function(socket) {
 
   var call_hooks = function(hook) {
     ctx.hook = hook;
-    if (milter.listenerCount(hook) === 0) {
+    if (milter.listenerCount(hook) === 0 && ctx.socket?.readyState === 'open') {
       return ctx.continue();
     }
     var args = Array.prototype.slice.call(arguments, 1);
