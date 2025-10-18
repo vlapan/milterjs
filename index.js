@@ -316,7 +316,6 @@ var server = net.createServer(function(socket) {
         // An abort packet doesn't need a response.
         // Resets internal state of milter program to before SMFIC_HELO, but keeps the connection open.
         ctx.macros = {};
-        call_hooks('abort');
         break;
       case SMFIC_BODY:
         call_hooks('body', data.toString());
