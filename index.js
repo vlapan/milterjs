@@ -83,7 +83,7 @@ var server = net.createServer(function(socket) {
   };
 
   ctx.send = function(code, data) {
-    if (!this.socket) {
+    if (this?.socket?.readyState === 'open') {
       return;
     }
     data = data || Buffer.alloc(0);
@@ -271,7 +271,7 @@ var server = net.createServer(function(socket) {
 
   var call_hooks = function(hook) {
     ctx.hook = hook;
-    if (milter.listenerCount(hook) === 0 && ctx.socket?.readyState === 'open') {
+    if (milter.listenerCount(hook) === 0) {
       return ctx.continue();
     }
     var args = Array.prototype.slice.call(arguments, 1);
