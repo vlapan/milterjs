@@ -304,10 +304,6 @@ var server = net.createServer(function(socket) {
       case SMFIC_ABORT:
         // Abort (cancel current message and get ready to process a new one).
         // An abort packet doesn't need a response.
-        if (ctx.socket) {
-          ctx.socket.end();
-          ctx.socket = null;
-        }
         call_hooks('abort');
         break;
       case SMFIC_BODY:
