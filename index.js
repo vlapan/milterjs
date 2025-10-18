@@ -309,7 +309,7 @@ var server = net.createServer(function(socket) {
 
 
   var parse_packet = function(command, data) {
-    debugLog('RECV', uniqueID, code, data);
+    debugLog('RECV', uniqueID, command, data);
     switch (command) {
       case SMFIC_ABORT:
         // Abort (cancel current message and get ready to process a new one).
