@@ -60,6 +60,15 @@ const SMFIP_NOEOH      = 0x40;
 const SMFIP_NONE       = 0x7F;
 /* eslint-enable no-unused-vars */
 
+const DEBUG = process.env.DEBUG;
+const debugLog = (description, uniqueID, command, data) => {
+  if (!DEBUG) {
+    return;
+  }
+  const readableData = data.toString('ascii').replace(/\0/g, '|NULL|');
+  console.log(`${description}: ID[${uniqueID}] CMD[${command}] DATA[${readableData}]`);
+};
+
 var uniqueID = 0;
 const milter = module.exports = new EventEmitter();
 milter.actions = SMFI_CURR_ACTS;
@@ -91,6 +100,7 @@ var server = net.createServer(function(socket) {
     len.writeUInt32BE(data.length + 1);
     const packet = Buffer.concat([len, Buffer.from([code.charCodeAt(0)]), data]);
     this.socket.write(packet, writeErrorHandler);
+    debugLog('SEND', uniqueID, code, data);
   };
 
   // Add header HEADER with value VALUE to this mail.  Does not change any
@@ -299,6 +309,7 @@ var server = net.createServer(function(socket) {
 
 
   var parse_packet = function(command, data) {
+    debugLog('RECV', uniqueID, code, data);
     switch (command) {
       case SMFIC_ABORT:
         // Abort (cancel current message and get ready to process a new one).
