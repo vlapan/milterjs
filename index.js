@@ -303,6 +303,8 @@ var server = net.createServer(function(socket) {
       case SMFIC_ABORT:
         // Abort (cancel current message and get ready to process a new one).
         // An abort packet doesn't need a response.
+        // Resets internal state of milter program to before SMFIC_HELO, but keeps the connection open.
+        ctx.macros = {};
         call_hooks('abort');
         break;
       case SMFIC_BODY:
